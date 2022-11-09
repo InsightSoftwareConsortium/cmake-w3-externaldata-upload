@@ -1,6 +1,6 @@
 {
-  "name": "@w3ui/example-vanilla-file-upload",
-  "version": "0.0.0",
+  "name": "cmake-w3-externaldata-upload",
+  "version": "1.0.0",
   "scripts": {
     "start": "vite",
     "dev": "vite",
