@@ -9,7 +9,9 @@
   <body style="background-color:#a2a2a2;">
     <div id="app" class="vh-100 flex flex-column justify-center items-center sans-serif light-silver">
       <header style="text-align: center; padding: 10px;">
+        <!-- <div class="near-black">CMake w3 ExternalData Upload</div> -->
         <img alt="logo" src="/src/assets/logo.png" width="250" style="border-radius: 15px;"/>
+        <p><a target="_blank" href="https://github.com/InsightSoftareConsortium/cmake-w3-externaldata-upload/main/README.md#About" class='blue'>About</a></p>
       </header>
       <div class="w-90 w-50-ns mw6">
 
@@ -87,9 +89,13 @@
     <template id="upload-complete-template">
       <div>
         <h1 class='near-black'>Done!</h1>
+        <h2 class='near-black'>Content Identifier: (CID):</h2>
         <p class='f6 code truncate near-black'><span data-root-cid-slot></span></p>
-        <p><a data-root-cid-href-slot href="" class='blue'>View <span data-file-name-slot></span> on IPFS Gateway.</a></p>
+        <p><a data-root-cid-href-slot href="" class='blue'>Download <span data-file-name-slot></span> from an IPFS Gateway.</a></p>
       </div>
+      <form id="download-form">
+        <button type='submit' class='ph3 pv2'>Download CMake ExternalData Content Link</button>
+      </form>
     </template>
 
     <script type="module" src="/src/main.js"></script>
