@@ -1,23 +1,33 @@
-# Example
+# cmake-w3-externaldata-upload
 
-To run this example:
+## Development
 
-- Clone the w3ui repository and enter the `w3ui` directory
+- Clone the repository:
 
-  ```sh
-  git clone https://github.com/web3-storage/w3ui
-  cd w3ui
-  ```
+```sh
+git clone https://github.com/InsightSoftwareConsortium/cmake-w3-externaldata-upload
+cd cmake-w3-externaldata-upload
+```
 
-- Change to this example directory and install dependencies
+- Change to this directory and install dependencies
 
-  ```sh
-  cd examples/vanilla/file-upload
-  npm install
-  ```
+```sh
+cd cmake-w3-externaldata-upload
+npm install --location=global pnpm
+pnpm install
+```
 
-- Run the example
+- Run the dev server
 
-  ```sh
-  npm start
-  ```
+```sh
+pnpm dev
+```
+
+- Test registration / file upload
+
+**Note: building and serving are required to test login/registration**
+
+```sh
+pnpm build
+pnpm preview
+```
