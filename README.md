@@ -59,7 +59,7 @@ the following:
 -   Kitware\'s HTTP Server
 
 *Note: This currently requires an extended version of the ExternalData.cmake module developed in [itk-wasm](https://github.com/InsightSoftwareConsortium/itk-wasm). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
-a portable way.* 
+portable way.* 
 
 ## Development
 
