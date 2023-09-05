@@ -4,7 +4,51 @@
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>W3UI Example App</title>
+    <title>CMake W3 ExternalData Upload</title>
+    <style>
+      label {
+        display: block;
+        padding: 32px 0 8px;
+        font-weight: 700;
+      }
+      #token {
+        width: 100%;
+        padding: 4px;
+        font-size: 1.2rem;
+      }
+      #output {
+        display: block;
+        padding: 16px;
+        margin: 0;
+        color: lime;
+        background:#222;
+        font-family: Courier New, ui-monospace, monospace;
+        font-weight: 500;
+        line-height: 1.6;
+        position: fixed;
+        bottom: 0;
+        height: 33.3%;
+        width: 100%;
+        overflow-y: scroll;
+      }
+      #output a {
+        color: aqua
+      }
+      input[type=submit] {
+        display: block;
+        padding: 4px 16px;
+        font-weight: 700;
+        font-size: 16px;
+        margin-top: 32px;
+      }
+      h1 {
+        text-align: center;
+        font-size: 24px;
+      }
+      h1 span {
+        display: block;
+      }
+    </style>
   </head>
   <body style="background-color:#a2a2a2;">
     <div id="app" class="vh-100 flex flex-column justify-center items-center sans-serif light-silver">
@@ -48,6 +92,10 @@
     <!-- Upload form -->
     <template id="upload-form-template">
       <form id="upload-form">
+        <div class='db mb3 near-black'>
+          <label for="token">Paste your <a href="https://web3.storage">web3.storage</a> API token here</label>
+          <input type="password" id="token" required />
+        </div>
         <div class='db mb3 near-black'>
           <label htmlFor='file' class='db mb2'>File:</label>
           <input id='file' class='db pa2 w-100 ba br2' type='file' required />
@@ -98,6 +146,7 @@
       </form>
     </template>
 
+    <div id="output"></div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

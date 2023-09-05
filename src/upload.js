@@ -1,10 +1,12 @@
-import { loadDefaultIdentity } from '@w3ui/keyring-core'
-import {
-  uploadCarChunks,
-  encodeFile,
-  chunkBlocks,
-  createUpload,
-} from '@w3ui/uploader-core'
+// import { loadDefaultIdentity } from '@w3ui/keyring-core'
+// import {
+//   uploadCarChunks,
+//   encodeFile,
+//   chunkBlocks,
+//   createUpload,
+// } from '@w3ui/uploader-core'
+import { Web3Storage } from 'web3.storage'
+const output = document.querySelector('#output')
 
 import download  from './download.js'
 
@@ -45,34 +47,73 @@ export class UploadFileForm extends window.HTMLElement {
     this.handleContentLinkDownload = this.handleContentLinkDownload.bind(this)
     this.form$ = document.querySelector(SELECTORS.uploadForm)
     this.form$.addEventListener('submit', this.handleFileUpload)
+
+    showMessage('> ⁂ waiting for API key and file to upload...')
   }
 
   async handleFileUpload(event) {
     event.preventDefault()
+
+    const tokenInput = document.querySelector('#token')
+    const token = tokenInput.value
+    if (!token) { 
+      showMessage('> ⁂ please enter your API key')
+      return
+    }
+    showMessage('> 📦 creating web3.storage client')
+    const client = new Web3Storage({ token })
+
     const fileInputEl = this.form$.querySelector('input[type=file')
     this.file = fileInputEl.files[0]
-    const identity = await loadDefaultIdentity()
-
-    if (identity) {
-      console.log(`DID2: ${identity.signingPrincipal.did()}`)
-    } else {
-      console.log('No identity registered2')
-    }
-
+    let cid
     try {
       this.toggleEncoding()
-      const { cid: cidPromise, blocks } = await encodeFile(this.file)
-      const chunks = chunkBlocks(blocks)
-      const carCids = await uploadCarChunks(identity.signingPrincipal, chunks)
-      const cid = await cidPromise
-      await createUpload(identity.signingPrincipal, cid, carCids)
+      showMessage('> 🤖 chunking and hashing the files (in your browser!) to calculate the Content ID')
+      this.fileName = this.file.name
+      cid = await client.put([this.file,], {
+        onRootCidReady: (localCid) => {
+          showMessage(`> 🔑 locally calculated Content ID: ${localCid} `)
+          showMessage('> 📡 sending file to web3.storage ')
+        },
+        onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`),
+        wrapWithDirectory: false,
+      })
+      showMessage(`> ✅ web3.storage now hosting ${cid}`)
       this.cid = cid
+      const cidLink = `https://w3s.link/ipfs/${this.cid}`
+      showLink(cidLink)
       this.toggleUploading()
     } catch (error) {
       this.toggleUploadError()
     } finally {
       this.toggleUploadComplete()
     }
+    this.cid = cid
+
+    // const fileInputEl = this.form$.querySelector('input[type=file')
+    // this.file = fileInputEl.files[0]
+    // const identity = await loadDefaultIdentity()
+
+    // if (identity) {
+    //   console.log(`DID2: ${identity.signingPrincipal.did()}`)
+    // } else {
+    //   console.log('No identity registered2')
+    // }
+
+    // try {
+    //   this.toggleEncoding()
+    //   const { cid: cidPromise, blocks } = await encodeFile(this.file)
+    //   const chunks = chunkBlocks(blocks)
+    //   const carCids = await uploadCarChunks(identity.signingPrincipal, chunks)
+    //   const cid = await cidPromise
+    //   await createUpload(identity.signingPrincipal, cid, carCids)
+    //   this.cid = cid
+    //   this.toggleUploading()
+    // } catch (error) {
+    //   this.toggleUploadError()
+    // } finally {
+    //   this.toggleUploadComplete()
+    // }
   }
 
   async handleContentLinkDownload (event) {
@@ -146,3 +187,17 @@ export class UploadFileForm extends window.HTMLElement {
 }
 
 window.customElements.define('upload-form', UploadFileForm)
+
+// From the web3.storage client browser example
+function showMessage (text) {
+  const node = document.createElement('div')
+  node.innerText = text
+  output.appendChild(node)
+}
+
+function showLink (url) {
+  const node = document.createElement('a')
+  node.href = url
+  node.innerText = `> 🔗 ${url}`
+  output.appendChild(node)
+}

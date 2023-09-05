@@ -4,7 +4,7 @@
 
 [CMake Web3 ExternalData Upload UI](https://cmake-w3-externaldata-upload.on.fleek.co/)
 
-Based on [w3ui](https://github.com/web3-storage/w3ui).
+Based on [the web3.storage browser client](https://web3.storage/docs/reference/js-client-library/#store-files) and [w3ui](https://github.com/web3-storage/w3ui).
 
 ## About
 
@@ -56,7 +56,7 @@ the following:
 -   Local [IPFS](https://ipfs.io/) nodes
 -   Peer [IPFS](https://ipfs.io/) nodes
 -   [web3.storage](https://web3.storage/)
--   [estuary.tech](https://estuary.tech)\`
+-   [estuary.tech](https://estuary.tech/)
 -   [pinata.cloud](https://pinata.cloud)
 -   Kitware\'s HTTP Server
 
