@@ -1,6 +1,6 @@
 {
   "name": "cmake-w3-externaldata-upload",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -8,9 +8,9 @@
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "@w3ui/uploader-core": "^2.0.2",
-    "@w3ui/uploads-list-core": "^1.0.3",
-    "@w3ui/keyring-core": "^1.0.2"
+    "@w3ui/uploader-core": "^6.0.0",
+    "@w3ui/uploads-list-core": "^4.0.0",
+    "@w3ui/keyring-core": "^5.0.0"
   },
   "devDependencies": {
     "vite": "^3.1.4"

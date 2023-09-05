@@ -1,5 +1,10 @@
 import { loadDefaultIdentity } from '@w3ui/keyring-core'
-import { uploadCarChunks, encodeFile, chunkBlocks, createUpload } from '@w3ui/uploader-core'
+import {
+  uploadCarChunks,
+  encodeFile,
+  chunkBlocks,
+  createUpload,
+} from '@w3ui/uploader-core'
 
 import download  from './download.js'
 
@@ -10,19 +15,27 @@ const SELECTORS = {
   encodingTemplate: '#file-encoding-template',
   uploadingTemplate: '#file-uploading-template',
   uploadCompleteTemplate: '#upload-complete-template',
-  uploadErrorTemplate: '#upload-errmr-template'
+  uploadErrorTemplate: '#upload-error-template',
 }
 
 export class UploadFileForm extends window.HTMLElement {
-  constructor () {
+  constructor() {
     super()
     this.form$ = document.querySelector(SELECTORS.uploadForm)
     this.downloadForm$ = document.querySelector(SELECTORS.downloadForm)
-    this.uploadFormTemplate$ = document.querySelector(SELECTORS.uploadFormTemplate)
+    this.uploadFormTemplate$ = document.querySelector(
+      SELECTORS.uploadFormTemplate
+    )
     this.encodingTemplate$ = document.querySelector(SELECTORS.encodingTemplate)
-    this.uploadingTemplate$ = document.querySelector(SELECTORS.uploadingTemplate)
-    this.uploadCompleteTemplate$ = document.querySelector(SELECTORS.uploadCompleteTemplate)
-    this.uploadErrorTemplate$ = document.querySelector(SELECTORS.uploadErrorTemplate)
+    this.uploadingTemplate$ = document.querySelector(
+      SELECTORS.uploadingTemplate
+    )
+    this.uploadCompleteTemplate$ = document.querySelector(
+      SELECTORS.uploadCompleteTemplate
+    )
+    this.uploadErrorTemplate$ = document.querySelector(
+      SELECTORS.uploadErrorTemplate
+    )
   }
 
   async connectedCallback () {
@@ -34,7 +47,7 @@ export class UploadFileForm extends window.HTMLElement {
     this.form$.addEventListener('submit', this.handleFileUpload)
   }
 
-  async handleFileUpload (event) {
+  async handleFileUpload(event) {
     event.preventDefault()
     const fileInputEl = this.form$.querySelector('input[type=file')
     this.file = fileInputEl.files[0]
@@ -92,13 +105,13 @@ export class UploadFileForm extends window.HTMLElement {
     this.replaceChildren(this.formatUploadErrorTemplateContent(templateContent))
   }
 
-  formatEncodingTemplateContent (templateContent) {
+  formatEncodingTemplateContent(templateContent) {
     const fileNameSlot = templateContent.querySelector('[data-file-name-slot]')
     fileNameSlot.innerText = this.file.name
     return templateContent
   }
 
-  formatUploadingTemplateContent (templateContent) {
+  formatUploadingTemplateContent(templateContent) {
     const cidSlot = templateContent.querySelector('[data-root-cid-slot]')
     cidSlot.innerText = this.cid
     const fileNameSlot = templateContent.querySelector('[data-file-name-slot]')
@@ -106,13 +119,13 @@ export class UploadFileForm extends window.HTMLElement {
     return templateContent
   }
 
-  formatUploadErrorTemplateContent (templateContent) {
+  formatUploadErrorTemplateContent(templateContent) {
     const slot = templateContent.querySelector('[data-error-messages-slot]')
     slot.innerText = this.errors
     return templateContent
   }
 
-  formatUploadCompleteTemplateContent (templateContent) {
+  formatUploadCompleteTemplateContent(templateContent) {
     const slot = templateContent.querySelector('[data-root-cid-slot]')
     slot.innerText = this.cid
     const hrefSlot = templateContent.querySelector('[data-root-cid-href-slot]')
@@ -123,7 +136,7 @@ export class UploadFileForm extends window.HTMLElement {
     return templateContent
   }
 
-  disconnectedCallback () {
+  disconnectedCallback() {
     this.form$.removeEventListener('submit', this.handleFileUpload)
     this.downloadForm$ = document.querySelector(SELECTORS.downloadForm)
     if (this.downloadForm$) {

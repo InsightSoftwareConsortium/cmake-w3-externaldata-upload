@@ -8,7 +8,7 @@ import {
   waitIdentityVerification,
   removeIdentity,
   storeIdentity,
-  loadDefaultIdentity
+  loadDefaultIdentity,
 } from '@w3ui/keyring-core'
 
 const SELECTORS = {
@@ -16,24 +16,28 @@ const SELECTORS = {
   cancelRegistrationButton: '#cancel-registration',
   signOutButton: '#sign-out',
   verificationTemplate: '#verification-required-template',
-  confirmationTemplate: '#registration-success-template'
+  confirmationTemplate: '#registration-success-template',
 }
 
 export class RegisterForm extends window.HTMLElement {
-  constructor () {
+  constructor() {
     super()
     this.identity = null
     this.email = null
     this.form$ = document.querySelector(SELECTORS.authForm)
-    this.confirmationTemplate$ = document.querySelector(SELECTORS.confirmationTemplate)
-    this.verificationTemplate$ = document.querySelector(SELECTORS.verificationTemplate)
+    this.confirmationTemplate$ = document.querySelector(
+      SELECTORS.confirmationTemplate
+    )
+    this.verificationTemplate$ = document.querySelector(
+      SELECTORS.verificationTemplate
+    )
     this.submitHandler = this.submitHandler.bind(this)
     this.cancelRegistrationHandler = this.cancelRegistrationHandler.bind(this)
     this.signOutHandler = this.signOutHandler.bind(this)
     this.formatTemplateContent = this.formatTemplateContent.bind(this)
   }
 
-  async connectedCallback () {
+  async connectedCallback() {
     this.form$.addEventListener('submit', this.submitHandler)
 
     const identity = await loadDefaultIdentity()
@@ -48,12 +52,12 @@ export class RegisterForm extends window.HTMLElement {
     }
   }
 
-  formatTemplateContent (templateContent) {
+  formatTemplateContent(templateContent) {
     templateContent.querySelector('[data-email-slot]').innerText = this.email
     return templateContent
   }
 
-  toggleConfirmation () {
+  toggleConfirmation() {
     const templateContent = this.confirmationTemplate$.content
     this.replaceChildren(this.formatTemplateContent(templateContent))
     this.signOutButton$ = document.querySelector(SELECTORS.signOutButton)
