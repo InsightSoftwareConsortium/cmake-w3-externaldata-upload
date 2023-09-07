@@ -56,7 +56,6 @@ the following:
 -   Local [IPFS](https://ipfs.io/) nodes
 -   Peer [IPFS](https://ipfs.io/) nodes
 -   [web3.storage](https://web3.storage/)
--   [estuary.tech](https://estuary.tech/)
 -   [pinata.cloud](https://pinata.cloud)
 -   Kitware\'s HTTP Server
 
