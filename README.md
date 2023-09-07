@@ -60,7 +60,7 @@ the following:
 -   [pinata.cloud](https://pinata.cloud)
 -   Kitware\'s HTTP Server
 
-*Note: This currently requires an extended version of the ExternalData.cmake module developed in [itk-wasm](https://github.com/InsightSoftwareConsortium/itk-wasm). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
+*Note: This currently requires an extended version of the ExternalData.cmake module developed in the [CMakeIPFSExternalData repository](https://github.com/InsightSoftwareConsortium/CMakeIPFSExternalData). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
 portable way.* 
 
 ## Development
