@@ -1,0 +1,8 @@
+name: cmake-w3-externaldata
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+    - hypha

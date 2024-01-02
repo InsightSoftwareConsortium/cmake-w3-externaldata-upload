@@ -2,15 +2,18 @@
   "name": "cmake-w3-externaldata-upload",
   "version": "2.0.0",
   "scripts": {
-    "start": "vite",
-    "dev": "vite",
-    "build": "vite build",
+    "start": "pnpm setup-micromamba && vite",
+    "dev": "pnpm setup-micromamba && vite",
+    "build": "pnpm setup-micromamba && vite build",
+    "setup-micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path ./micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
     "web3.storage": "^4.5.5"
   },
   "devDependencies": {
+    "@thewtex/setup-micromamba": "^1.9.7",
+    "concurrently": "^8.2.2",
     "vite": "^3.1.4"
   }
 }
