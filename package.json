@@ -2,10 +2,11 @@
   "name": "cmake-w3-externaldata-upload",
   "version": "2.0.0",
   "scripts": {
-    "start": "pnpm setup-micromamba && vite",
-    "dev": "pnpm setup-micromamba && vite",
-    "build": "pnpm setup-micromamba && vite build",
+    "start": "concurrently -n \"hypha,vite\" --success first -k \"pnpm start-hypha\" \"vite build --sourcemap true --watch\"",
+    "dev": "pnpm start",
+    "build": "vite build",
     "setup-micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path ./micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
+    "start-hypha": "pnpm setup-micromamba && ./micromamba/micromamba run -r micromamba -n cmake-w3-externaldata hypha --host=0.0.0.0 --port=9000 --startup-functions=./hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {

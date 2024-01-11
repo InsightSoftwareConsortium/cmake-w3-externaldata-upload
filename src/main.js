@@ -1,6 +1,6 @@
 import './assets/tachyons.min.css'
 import './assets/spinner.css'
-// import { RegisterForm } from './register'
+import { RegisterForm } from './register'
 import { UploadFileForm } from './upload'
 
 export const EVENTS = {
@@ -28,6 +28,5 @@ registerEl.remove()
 const uploadEl = document.createElement('upload-form')
 const container = document.querySelector('#app div')
 container.appendChild(uploadEl)
-export { UploadFileForm }
 
-// export { RegisterForm, UploadFileForm }
+export { RegisterForm, UploadFileForm }

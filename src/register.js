@@ -1,15 +1,6 @@
 import './assets/tachyons.min.css'
 import { EVENTS } from './main'
 
-import {
-  createIdentity,
-  registerIdentity,
-  sendVerificationEmail,
-  waitIdentityVerification,
-  removeIdentity,
-  storeIdentity,
-  loadDefaultIdentity,
-} from '@w3ui/keyring-core'
 
 const SELECTORS = {
   authForm: '#sign-up-in-form',
