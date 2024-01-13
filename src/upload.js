@@ -1,14 +1,7 @@
-// import { loadDefaultIdentity } from '@w3ui/keyring-core'
-// import {
-//   uploadCarChunks,
-//   encodeFile,
-//   chunkBlocks,
-//   createUpload,
-// } from '@w3ui/uploader-core'
-import { Web3Storage } from 'web3.storage'
 const output = document.querySelector('#output')
 
 import download  from './download.js'
+import hypha from './hypha.js'
 
 const SELECTORS = {
   uploadForm: '#upload-form',
@@ -48,7 +41,9 @@ export class UploadFileForm extends window.HTMLElement {
     this.form$ = document.querySelector(SELECTORS.uploadForm)
     this.form$.addEventListener('submit', this.handleFileUpload)
 
-    showMessage('> ⁂ waiting for API key and file to upload...')
+    const email = await hypha.email()
+
+    showMessage(`> 😊 welcome ${email}`)
   }
 
   async handleFileUpload(event) {

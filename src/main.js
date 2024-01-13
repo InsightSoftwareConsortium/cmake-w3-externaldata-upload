@@ -1,32 +1,23 @@
 import './assets/tachyons.min.css'
 import './assets/spinner.css'
-import { RegisterForm } from './register'
+import { LoginInterface } from './login'
 import { UploadFileForm } from './upload'
 
 export const EVENTS = {
-  registrationSuccess: 'registration:success',
+  loginSuccess: 'login:success',
 }
 
 const SELECTORS = {
-  registerComponent: '#register-form-component',
+  loginInterfaceComponent: '#login-interface-component',
   uploadComponent: '#upload-form-component',
 }
 
-document.addEventListener(EVENTS.registrationSuccess, (event) => {
-  const registerEl = document.querySelector(SELECTORS.registerComponent)
+document.addEventListener(EVENTS.loginSuccess, (event) => {
+  const loginEl = document.querySelector(SELECTORS.loginInterfaceComponent)
   // Switch components
-  registerEl.remove()
   const uploadEl = document.createElement('upload-form')
   const container = document.querySelector('#app div')
-  container.appendChild(uploadEl)
+  container.prepend(uploadEl)
 })
 
-// Until we go back to w3ui, support registration, just use the api
-const registerEl = document.querySelector(SELECTORS.registerComponent)
-// Switch components
-registerEl.remove()
-const uploadEl = document.createElement('upload-form')
-const container = document.querySelector('#app div')
-container.appendChild(uploadEl)
-
-export { RegisterForm, UploadFileForm }
+export { LoginInterface, UploadFileForm }

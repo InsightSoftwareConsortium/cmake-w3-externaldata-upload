@@ -6,11 +6,18 @@
     "dev": "pnpm start",
     "build": "vite build",
     "setup-micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path ./micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
-    "start-hypha": "pnpm setup-micromamba && ./micromamba/micromamba run -r micromamba -n cmake-w3-externaldata hypha --host=0.0.0.0 --port=9000 --startup-functions=./hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
+    "start-hypha": "pnpm setup-micromamba && ./micromamba/micromamba run -r micromamba -n cmake-w3-externaldata hypha --host=0.0.0.0 --port=9000 --startup-functions=./src/hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {
-    "web3.storage": "^4.5.5"
+    "@ipld/car": "^5.2.6",
+    "@ucanto/core": "^9.0.1",
+    "@ucanto/principal": "^9.0.0",
+    "@web3-storage/w3up-client": "^12.0.0",
+    "commander": "^11.1.0",
+    "dotenv": "^16.3.1",
+    "files-from-path": "^1.0.4",
+    "imjoy-rpc": "^0.5.46"
   },
   "devDependencies": {
     "@thewtex/setup-micromamba": "^1.9.7",
