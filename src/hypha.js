@@ -37,6 +37,10 @@ class HyphaUploader {
       const email = await this.uploader.email()
       return email
     }
+
+    async uploadFile(file, callbacks) {
+      await this.uploader.uploadFile(file, callbacks)
+    }
 }
 
 const hypha = new HyphaUploader()

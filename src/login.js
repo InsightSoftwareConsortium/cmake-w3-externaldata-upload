@@ -31,7 +31,9 @@ export class LoginInterface extends window.HTMLElement {
     const templateContent = this.confirmationTemplate$.content
     this.replaceChildren(this.formatTemplateContent(templateContent))
     this.loginIframe$ = document.querySelector(SELECTORS.loginIframe)
-    this.loginIframe$.remove()
+    if (this.loginIframe$) {
+      this.loginIframe$.remove()
+    }
     this.signOutButton$ = document.querySelector(SELECTORS.signOutButton)
     this.signOutButton$.addEventListener('click', this.signOutHandler)
 
