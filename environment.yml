@@ -1,0 +1,14 @@
+name: cmake-w3-externaldata
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pandas
+  - pip
+  - pip:
+    - git+https://github.com/amun-ai/hypha@498ce7bad10cfb57f42dc0f72839392b1be1f721
+    - imjoy-rpc
+    - fastapi==0.104.1
+    - duckdb
+    - mailjet_rest
+    - python-dotenv

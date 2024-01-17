@@ -1,2 +1,6 @@
 node_modules/
 dist/
+micromamba/
+.env
+oauth2_creds.json
+data.duckdb
