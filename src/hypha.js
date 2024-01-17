@@ -1,6 +1,6 @@
 import { hyphaWebsocketClient } from 'imjoy-rpc'
 
-const SERVER_URL = document.location.origin
+const SERVER_URL = import.meta.env.VITE_HYPHA_SERVER_URL || document.location.origin
 
 const SELECTORS = {
   loginIframe: '#login-iframe',
@@ -24,7 +24,7 @@ class HyphaUploader {
       this.token = await hyphaWebsocketClient.login({ 'server_url': SERVER_URL, login_callback: this.loginCallback.bind(this) })
       const server = await hyphaWebsocketClient.connectToServer({'server_url': SERVER_URL, "token": this.token})
       this.server = server
-      this.uploader = await server.getService('uploader')
+      this.uploader = await server.getService('cmake-w3-externaldata-upload')
       uiLoginCallback()
     }
 

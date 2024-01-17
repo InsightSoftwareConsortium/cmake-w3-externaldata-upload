@@ -4,10 +4,11 @@
   "scripts": {
     "start": "concurrently -n \"hypha,vite\" --success first -k \"pnpm start-hypha\" \"vite build --sourcemap true --watch\"",
     "dev": "pnpm start",
-    "build": "vite build",
+    "build": "VITE_HYPHA_SERVER_URL=https://ai.imjoy.io vite build",
     "setup-micromamba": "setup-micromamba --micromamba-binary-path ./micromamba/micromamba --micromamba-root-path ./micromamba --init-shell none --create-environment true --environment-file environment.yml --log-level info --run-command \"clean -fya\"",
-    "start-hypha": "pnpm setup-micromamba && ./micromamba/micromamba run -r micromamba -n cmake-w3-externaldata hypha --host=0.0.0.0 --port=9000 --startup-functions=./src/hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
-    "preview": "vite preview --port 4173"
+    "start-hypha": "pnpm setup-micromamba && ./micromamba/micromamba run -e VITE_HYPHA_SERVER_URL=http://localhost:9000 -e PYTHONPATH=./src -r micromamba -n cmake-w3-externaldata hypha --host=0.0.0.0 --port=9000 --startup-functions=./src/hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
+    "start-hypha-service": "pnpm setup-micromamba && ./micromamba/micromamba run -e VITE_HYPHA_SERVER_URL=https://ai.imjoy.io -e PYTHONPATH=./src -r micromamba -n cmake-w3-externaldata python ./src/register-hypha-uploader-service.py",
+    "preview": "VITE_HYPHA_SERVER_URL=https://ai.imjoy.io vite preview --port 4173"
   },
   "dependencies": {
     "@ipld/car": "^5.2.6",
