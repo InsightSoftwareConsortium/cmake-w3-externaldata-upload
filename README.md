@@ -64,32 +64,53 @@ portable way.*
 
 ## Development
 
-- Clone the repository:
+### Clone, install dependencies:
 
 ```sh
 git clone https://github.com/InsightSoftwareConsortium/cmake-w3-externaldata-upload
 cd cmake-w3-externaldata-upload
 ```
 
-- Change to this directory and install dependencies
+Change to this directory and install dependencies
 
 ```sh
 cd cmake-w3-externaldata-upload
 npm install --location=global pnpm
 pnpm install
+pnpm setup-micromamba
 ```
 
-- Run the dev server
+### Populate .env
+
+Populate a *.env* file in the repository with environmental variables used by application services in the format `<VAR>=<VALUE>`.
+
+#### web3.storage
+
+Populate `DID`, `KEY`, and `PROOF` as [described in the web3.storage documentation on creation of delegations](https://web3.storage/docs/how-to/upload/#bring-your-own-delegations).
+
+### mailjet
+
+For monitor emails, set the [MailJet](https://mailjet.com) keys `MJ_APIKEY_PUBLIC`, `MJ_APIKEY_PRIVATE`. Also `SENDER_EMAIL` and `RECIPIENT_EMAIL`. Note that DNS records should be set for the sender and the sender configured in MailJet.
+
+### Run the dev server
 
 ```sh
 pnpm dev
 ```
 
-- Test registration / file upload
+This starts, a [hypha server](https://ha.amun.ai/#/), a hypha Python service, and the client side build, and serves them locally.
 
-**Note: building and serving are required to test login/registration**
+To test production builds instead, run
+
+```sh
+pnpm start-hypha-service
+```
+
+in one terminal and
 
 ```sh
 pnpm build
 pnpm preview
 ```
+
+in another.
