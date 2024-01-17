@@ -10,4 +10,5 @@ dependencies:
     - imjoy-rpc
     - fastapi==0.104.1
     - duckdb
-    - yagmail
+    - mailjet_rest
+    - python-dotenv
