@@ -11,6 +11,7 @@ import os
 
 class Uploader:
     max_upload_size = 1024 * 1024 * 50  # 50MB
+    quota_per_user = 1024 * 1024 * 1024 * 1  # 1GB
     database_file = "data.duckdb"
     api_key = os.environ['MJ_APIKEY_PUBLIC']
     api_secret = os.environ['MJ_APIKEY_PRIVATE']
@@ -26,10 +27,22 @@ class Uploader:
             callbacks["uploadErrorCallback"](f"File size, {contents.size} bytes, exceeds limit of {max_upload_size} bytes")
             return
 
+        auth_id = context['user']['id']
+        email = context['user']['email']
+        size = contents.size
+
         with duckdb.connect(Uploader.database_file, read_only=True) as con:
             blacklisted = con.sql("SELECT * FROM blacklist").df()
-            if context['user']['email'] in blacklisted['email'].unique() or context['user']['id'] in blacklisted['auth_id'].unique():
+            if email in blacklisted['email'].unique() or auth_id in blacklisted['auth_id'].unique():
                 callbacks["uploadErrorCallback"]("User not permitted to upload")
+                return
+            id_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE auth_id = '{auth_id}'").fetchone()[0]
+            if id_uploads_size is not None and id_uploads_size + size > Uploader.quota_per_user:
+                callbacks["uploadErrorCallback"]("User has exceeded upload quota")
+                return
+            email_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE email = '{email}'").fetchone()[0]
+            if email_uploads_size is not None and email_uploads_size + size > Uploader.quota_per_user:
+                callbacks["uploadErrorCallback"]("User has exceeded upload quota")
                 return
 
         callbacks["startingUploadCallback"]()
@@ -46,10 +59,7 @@ class Uploader:
                 callbacks["uploadErrorCallback"]('Error during web3.storage upload')
                 return
 
-            auth_id = context['user']['id']
-            email = context['user']['email']
             name = contents.name
-            size = contents.size
 
             with duckdb.connect(Uploader.database_file) as con:
                 con.sql(f"INSERT INTO upload_log (auth_id, email, name, size, cid, upload_time) VALUES ('{auth_id}', '{email}', '{name}', {size}, '{cid}', now())")
