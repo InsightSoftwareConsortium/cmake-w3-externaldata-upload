@@ -18,7 +18,6 @@ export class LoginInterface extends window.HTMLElement {
     this.signOutHandler = this.signOutHandler.bind(this)
     this.formatTemplateContent = this.formatTemplateContent.bind(this)
     this.loginIframe$ = document.querySelector(SELECTORS.loginIframe)
-    this.loginIframe$.src = `${import.meta.env.BASE_URL}/hypha-loading.html`
   }
 
   async connectedCallback() {

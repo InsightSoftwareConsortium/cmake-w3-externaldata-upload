@@ -11,6 +11,7 @@ class HyphaUploader {
         this.token = null
         this.server = null
         this.loginIframe$ = document.querySelector(SELECTORS.loginIframe)
+        this.loginIframe$.src = `${import.meta.env.BASE_URL}/hypha-loading.html`
     }
 
     async loginCallback(context) {
