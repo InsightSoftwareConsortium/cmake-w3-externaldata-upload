@@ -36,11 +36,11 @@ class Uploader:
             if email in blacklisted['email'].unique() or auth_id in blacklisted['auth_id'].unique():
                 callbacks["uploadErrorCallback"]("User not permitted to upload")
                 return
-            id_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE auth_id = '{auth_id}'").fetchone()[0]
+            id_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE auth_id = $auth_id", params={ "auth_id": auth_id }).fetchone()[0]
             if id_uploads_size is not None and id_uploads_size + size > Uploader.quota_per_user:
                 callbacks["uploadErrorCallback"]("User has exceeded upload quota")
                 return
-            email_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE email = '{email}'").fetchone()[0]
+            email_uploads_size = con.sql(f"SELECT SUM(size) FROM upload_log WHERE email = $email", params={ "email": email }).fetchone()[0]
             if email_uploads_size is not None and email_uploads_size + size > Uploader.quota_per_user:
                 callbacks["uploadErrorCallback"]("User has exceeded upload quota")
                 return
@@ -62,7 +62,7 @@ class Uploader:
             name = contents.name
 
             with duckdb.connect(Uploader.database_file) as con:
-                con.sql(f"INSERT INTO upload_log (auth_id, email, name, size, cid, upload_time) VALUES ('{auth_id}', '{email}', '{name}', {size}, '{cid}', now())")
+                con.sql(f"INSERT INTO upload_log (auth_id, email, name, size, cid, upload_time) VALUES ($auth_id, $email, $name, $size, $cid, now())", params={ "auth_id": auth_id, "email": email, "name": name, "size": size, "cid": cid })
 
             callbacks["uploadCompleteCallback"](cid)
 
