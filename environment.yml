@@ -12,3 +12,4 @@ dependencies:
     - duckdb
     - mailjet_rest
     - python-dotenv
+    - retrying-async

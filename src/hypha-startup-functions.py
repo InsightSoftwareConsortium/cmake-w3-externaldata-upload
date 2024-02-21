@@ -1,8 +1,10 @@
 """Startup function file for Hypha."""
 
+from retrying_async import retry
+
 from uploader import uploader
 
-async def hypha_startup(server):
+async def hypha_startup_fn(server):
     """Hypha startup function."""
 
     await server.register_service(
@@ -18,3 +20,5 @@ async def hypha_startup(server):
     )
 
     print(f"server.config {server.config}")
+
+hypha_startup = retry(hypha_startup_fn, attempts=1000)
