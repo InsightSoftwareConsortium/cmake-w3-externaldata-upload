@@ -88,7 +88,7 @@ export class UploadFileForm extends window.HTMLElement {
 
   async handleContentLinkDownload (event) {
     event.preventDefault()
-    download(`${this.file.name}.cid`, this.cid)
+    download(`${this.file.name}.cid`, `${this.cid}\n`)
 
     // Reset
     await this.connectedCallback()
