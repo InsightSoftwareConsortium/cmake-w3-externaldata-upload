@@ -4,3 +4,7 @@ micromamba/
 .env
 oauth2_creds.json
 data.duckdb
+
+# pixi environments
+.pixi
+*.egg-info
