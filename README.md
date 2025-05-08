@@ -57,7 +57,6 @@ the following:
 -   Peer [IPFS](https://ipfs.io/) nodes
 -   [web3.storage](https://web3.storage/)
 -   [pinata.cloud](https://pinata.cloud)
--   Kitware\'s HTTP Server
 
 *Note: This currently requires an extended version of the ExternalData.cmake module developed in the [CMakeIPFSExternalData repository](https://github.com/InsightSoftwareConsortium/CMakeIPFSExternalData). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
 portable way.* 
