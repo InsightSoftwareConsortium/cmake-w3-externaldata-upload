@@ -1,49 +1,58 @@
-import { hyphaWebsocketClient } from 'imjoy-rpc'
+import { hyphaWebsocketClient } from "hypha-rpc";
 
-const SERVER_URL = import.meta.env.VITE_HYPHA_SERVER_URL || document.location.origin
+const SERVER_URL =
+  import.meta.env.VITE_HYPHA_SERVER_URL || document.location.origin;
 
 const SELECTORS = {
-  loginIframe: '#login-iframe',
-}
+  loginIframe: "#login-iframe",
+};
 
 class HyphaUploader {
-    constructor() {
-        this.token = null
-        this.server = null
-        this.loginIframe$ = document.querySelector(SELECTORS.loginIframe)
-        this.loginIframe$.src = `${document.location.origin}${import.meta.env.BASE_URL}hypha-loading.html`
-    }
+  constructor() {
+    this.token = null;
+    this.server = null;
+    this.loginIframe$ = document.querySelector(SELECTORS.loginIframe);
+    this.loginIframe$.src = `${document.location.origin}${
+      import.meta.env.BASE_URL
+    }hypha-loading.html`;
+  }
 
-    async loginCallback(context) {
-      this.login_url = context.login_url
-      this.key = context.key
+  async loginCallback(context) {
+    this.login_url = context.login_url;
+    this.key = context.key;
 
-      this.loginIframe$.src = context.login_url
-    }
+    this.loginIframe$.src = context.login_url;
+  }
 
-    async login(uiLoginCallback) {
-      this.token = await hyphaWebsocketClient.login({ 'server_url': SERVER_URL, login_callback: this.loginCallback.bind(this) })
-      const server = await hyphaWebsocketClient.connectToServer({'server_url': SERVER_URL, "token": this.token})
-      this.server = server
-      this.uploader = await server.getService('cmake-w3-externaldata-upload')
-      uiLoginCallback()
-    }
+  async login(uiLoginCallback) {
+    this.token = await hyphaWebsocketClient.login({
+      server_url: SERVER_URL,
+      login_callback: this.loginCallback.bind(this),
+    });
+    const server = await hyphaWebsocketClient.connectToServer({
+      server_url: SERVER_URL,
+      token: this.token,
+    });
+    this.server = server;
+    this.uploader = await server.getService("cmake-w3-externaldata-upload");
+    uiLoginCallback();
+  }
 
-    logout() {
-      const logoutUrl = `${this.login_url}/?key=${this.key}&logout=true`
-      window.open(logoutUrl, '_blank')
-    }
+  logout() {
+    const logoutUrl = `${this.login_url}/?key=${this.key}&logout=true`;
+    window.open(logoutUrl, "_blank");
+  }
 
-    async email() {
-      const email = await this.uploader.email()
-      return email
-    }
+  async email() {
+    const email = await this.uploader.email();
+    return email;
+  }
 
-    async uploadFile(file, callbacks) {
-      await this.uploader.uploadFile(file, callbacks)
-    }
+  async uploadFile(file, callbacks) {
+    await this.uploader.uploadFile(file, callbacks);
+  }
 }
 
-const hypha = new HyphaUploader()
+const hypha = new HyphaUploader();
 
-export default hypha
+export default hypha;
