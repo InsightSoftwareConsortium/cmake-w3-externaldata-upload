@@ -34,7 +34,9 @@ class HyphaUploader {
       token: this.token,
     });
     this.server = server;
-    this.uploader = await server.getService("cmake-w3-externaldata-upload");
+    this.uploader = await server.getService(
+      "public/cmake-w3-externaldata-upload"
+    );
     uiLoginCallback();
   }
 
