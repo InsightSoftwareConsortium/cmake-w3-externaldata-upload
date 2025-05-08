@@ -14,6 +14,7 @@ start = { cmd="pnpm start", description="Start the application", depends-on=["bu
 [dependencies]
 python = "3.11.*"
 pnpm = ">=10.10.0,<11"
+pandas = ">=2.2.3,<3"
 
 [pypi-dependencies]
 duckdb = ">=1.2.2, <2"
