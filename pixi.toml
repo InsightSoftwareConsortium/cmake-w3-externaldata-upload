@@ -8,11 +8,13 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-python = "3.11.*"
+python = "3.13.*"
 
 [pypi-dependencies]
 duckdb = ">=1.2.2, <2"
 mailjet-rest = ">=1.4.0, <2"
 python-dotenv = ">=1.1.0, <2"
 retrying-async = ">=2.0.0, <3"
-hypha = ">=0.20.51.post4, <0.21"
+hypha = { version=">=0.20.51.post4, <0.21", extras=["server-apps"] }
+hypha-rpc = ">=0.20.53, <0.21"
+redis = "==5.2.0"
