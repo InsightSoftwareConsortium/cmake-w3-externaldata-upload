@@ -10,6 +10,8 @@ pnpm-install = { cmd="pnpm install", description="Install JavaScript dependencie
 build = { cmd="pnpm build", description="Build JavaScript code", depends-on=["pnpm-install"], outputs=["dist"] }
 start-hypha = { cmd="pnpm start-hypha", description="Start the Hypha server", depends-on=["build"] }
 start = { cmd="pnpm start", description="Start the application", depends-on=["build"] }
+start-hypha-service = { cmd="pnpm start-hypha-service", description="Start the production Hypha service", depends-on=["build"] }
+preview = { cmd="pnpm preview", description="Preview the production web page", depends-on=["build"] }
 
 [dependencies]
 python = "3.11.*"
