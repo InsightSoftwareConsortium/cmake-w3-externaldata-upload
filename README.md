@@ -70,13 +70,16 @@ git clone https://github.com/InsightSoftwareConsortium/cmake-w3-externaldata-upl
 cd cmake-w3-externaldata-upload
 ```
 
-Change to this directory and install dependencies
+Install [pixi](https://pixi.sh/) if not already installed:
 
 ```sh
-cd cmake-w3-externaldata-upload
-npm install --location=global pnpm
-pnpm install
-pnpm setup-micromamba
+curl -fsSL https://pixi.sh/install.sh | sh
+```
+
+Start with an empty database:
+
+```sh
+cp data.duckdb.empty data.duckdb
 ```
 
 ### Populate .env
@@ -94,10 +97,12 @@ For monitor emails, set the [MailJet](https://mailjet.com) keys `MJ_APIKEY_PUBLI
 ### Run the dev server
 
 ```sh
-pnpm dev
+pixi run start
 ```
 
 This starts, a [hypha server](https://ha.amun.ai/#/), a hypha Python service, and the client side build, and serves them locally.
+
+Visit [http://localhost:9000/app/index.html](http://localhost:9000/app/index.html) to view the application.
 
 To test production builds instead, run
 
