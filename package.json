@@ -4,10 +4,10 @@
   "scripts": {
     "start": "concurrently -n \"hypha,vite\" --success first -k \"pnpm start-hypha\" \"vite build --sourcemap true --watch\"",
     "dev": "pnpm start",
-    "build": "VITE_HYPHA_SERVER_URL=https://hypha.aicell.io vite build",
+    "build": "VITE_HYPHA_SERVER_URL=https://hypha.website vite build",
     "start-hypha": "VITE_HYPHA_SERVER_URL=http://localhost:9000 PYTHONPATH=./src hypha --host=0.0.0.0 --port=9000 --startup-functions=./src/hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
-    "start-hypha-service": "VITE_HYPHA_SERVER_URL=https://hypha.aicell.io -e PYTHONPATH=./src python ./src/register-hypha-uploader-service.py",
-    "preview": "VITE_HYPHA_SERVER_URL=https://hypha.aicell.io vite preview --port 4173"
+    "start-hypha-service": "VITE_HYPHA_SERVER_URL=https://hypha.website PYTHONPATH=./src python ./src/register-hypha-uploader-service.py",
+    "preview": "VITE_HYPHA_SERVER_URL=https://hypha.website vite preview --port 4173"
   },
   "dependencies": {
     "@ipld/car": "^5.2.6",
