@@ -8,3 +8,6 @@ data.duckdb
 # pixi environments
 .pixi
 *.egg-info
+
+# Local Netlify folder
+.netlify
