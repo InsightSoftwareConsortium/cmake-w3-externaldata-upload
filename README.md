@@ -1,8 +1,8 @@
 # cmake-w3-externaldata-upload
 
-[![screenshot](./screenshot.png)](https://cmake-w3-externaldata-upload.on.fleek.co/)
+[![screenshot](./screenshot.png)](https://content-link-upload.netlify.app)
 
-[CMake Web3 ExternalData Upload UI](https://cmake-w3-externaldata-upload.on.fleek.co/)
+[CMake Web3 ExternalData Upload UI](https://content-link-upload.netlify.app)
 
 Based on [the web3.storage browser client](https://web3.storage/docs/reference/js-client-library/#store-files) and [w3ui](https://github.com/web3-storage/w3ui).
 
@@ -104,17 +104,15 @@ This starts, a [hypha server](https://ha.amun.ai/#/), a hypha Python service, an
 
 Visit [http://localhost:9000/app/index.html](http://localhost:9000/app/index.html) to view the application.
 
-To test production builds instead, run
+### Production service
+
+The production server currently runs on a cloud VM with
 
 ```sh
-pnpm start-hypha-service
+pixi run start-hypha-service
 ```
 
-in one terminal and
+Running under [supervisord](https://supervisord.org/).
 
-```sh
-pnpm build
-pnpm preview
-```
-
-in another.
+The content-link-upload.itk.org is served on
+https://content-link-upload.netlify.app and built via `pnpm run build`.
