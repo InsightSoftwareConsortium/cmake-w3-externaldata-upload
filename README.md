@@ -1,8 +1,8 @@
 # cmake-w3-externaldata-upload
 
-[![screenshot](./screenshot.png)](https://cmake-w3-externaldata-upload.on.fleek.co/)
+[![screenshot](./screenshot.png)](https://content-link-upload.netlify.app)
 
-[CMake Web3 ExternalData Upload UI](https://cmake-w3-externaldata-upload.on.fleek.co/)
+[CMake Web3 ExternalData Upload UI](https://content-link-upload.netlify.app)
 
 Based on [the web3.storage browser client](https://web3.storage/docs/reference/js-client-library/#store-files) and [w3ui](https://github.com/web3-storage/w3ui).
 
@@ -57,7 +57,6 @@ the following:
 -   Peer [IPFS](https://ipfs.io/) nodes
 -   [web3.storage](https://web3.storage/)
 -   [pinata.cloud](https://pinata.cloud)
--   Kitware\'s HTTP Server
 
 *Note: This currently requires an extended version of the ExternalData.cmake module developed in the [CMakeIPFSExternalData repository](https://github.com/InsightSoftwareConsortium/CMakeIPFSExternalData). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
 portable way.* 
@@ -71,13 +70,16 @@ git clone https://github.com/InsightSoftwareConsortium/cmake-w3-externaldata-upl
 cd cmake-w3-externaldata-upload
 ```
 
-Change to this directory and install dependencies
+Install [pixi](https://pixi.sh/) if not already installed:
 
 ```sh
-cd cmake-w3-externaldata-upload
-npm install --location=global pnpm
-pnpm install
-pnpm setup-micromamba
+curl -fsSL https://pixi.sh/install.sh | sh
+```
+
+Start with an empty database:
+
+```sh
+cp data.duckdb.empty data.duckdb
 ```
 
 ### Populate .env
@@ -95,22 +97,22 @@ For monitor emails, set the [MailJet](https://mailjet.com) keys `MJ_APIKEY_PUBLI
 ### Run the dev server
 
 ```sh
-pnpm dev
+pixi run start
 ```
 
 This starts, a [hypha server](https://ha.amun.ai/#/), a hypha Python service, and the client side build, and serves them locally.
 
-To test production builds instead, run
+Visit [http://localhost:9000/app/index.html](http://localhost:9000/app/index.html) to view the application.
+
+### Production service
+
+The production server currently runs on a cloud VM with
 
 ```sh
-pnpm start-hypha-service
+pixi run start-hypha-service
 ```
 
-in one terminal and
+Running under [supervisord](https://supervisord.org/).
 
-```sh
-pnpm build
-pnpm preview
-```
-
-in another.
+The content-link-upload.itk.org is served on
+https://content-link-upload.netlify.app and built via `pnpm run build`.

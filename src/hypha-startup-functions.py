@@ -1,6 +1,6 @@
 """Startup function file for Hypha."""
 
-from retrying_async import retry
+from async_retrying_ng import retry
 
 from uploader import uploader
 
