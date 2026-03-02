@@ -1,6 +1,6 @@
 const output = document.querySelector('#output')
 
-// From the web3.storage client browser example
+// From the Storacha client browser example
 export function showMessage (text) {
   const node = document.createElement('div')
   node.innerText = text

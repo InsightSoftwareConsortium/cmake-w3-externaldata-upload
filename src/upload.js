@@ -71,9 +71,9 @@ export class UploadFileForm extends window.HTMLElement {
       this.fileName = this.file.name
       cid = await client.put([this.file,], {
         onRootCidReady: (localCid) => {
-          showMessage('> 📡 sending file to web3.storage ')
+          showMessage('> 📡 sending file to Storacha ')
         },
-        onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to web3.storage`),
+        onStoredChunk: (bytes) => showMessage(`> 🛰 sent ${bytes.toLocaleString()} bytes to Storacha`),
         wrapWithDirectory: false,
       })
       this.cid = cid
@@ -108,8 +108,8 @@ export class UploadFileForm extends window.HTMLElement {
   toggleUploadComplete (cid) {
     this.cid = cid
     showMessage(`> 🔑 Calculated Content ID: ${cid} `)
-    showMessage(`> ✅ web3.storage now hosting ${cid}`)
-    const cidLink = `https://w3s.link/ipfs/${this.cid}`
+    showMessage(`> ✅ Storacha now hosting ${cid}`)
+    const cidLink = `https://storacha.link/ipfs/${this.cid}`
     showLink(cidLink)
     const templateContent = this.uploadCompleteTemplate$.content.cloneNode(true)
     this.replaceChildren(this.formatUploadCompleteTemplateContent(templateContent))
@@ -146,7 +146,7 @@ export class UploadFileForm extends window.HTMLElement {
     const slot = templateContent.querySelector('[data-root-cid-slot]')
     slot.innerText = this.cid
     const hrefSlot = templateContent.querySelector('[data-root-cid-href-slot]')
-    hrefSlot.href = `https://w3s.link/ipfs/${this.cid}`
+    hrefSlot.href = `https://storacha.link/ipfs/${this.cid}`
     hrefSlot.download = this.file.name
     const fileNameSlot = templateContent.querySelector('[data-file-name-slot]')
     fileNameSlot.innerText = this.file.name

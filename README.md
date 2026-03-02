@@ -4,7 +4,7 @@
 
 [CMake Web3 ExternalData Upload UI](https://content-link-upload.netlify.app)
 
-Based on [the web3.storage browser client](https://web3.storage/docs/reference/js-client-library/#store-files) and [w3ui](https://github.com/web3-storage/w3ui).
+Based on [the Storacha client](https://docs.storacha.network/js-client/) and [w3ui](https://github.com/storacha/w3ui).
 
 ## About
 
@@ -44,8 +44,8 @@ known as the dWeb or Web3. By adopting Web3, we gain:
 -   Scalability
 -   Sustainability
 
-Contributors to upload their data through an easy-to-use,
-permissionless, free service, [web3.storage](https://web3.storage/).
+Contributors upload their data through an easy-to-use,
+permissionless, free service, [storacha.network](https://storacha.network/).
 
 Data used in the Git repository is periodically tracked in a
 dedicated [Datalad
@@ -55,7 +55,7 @@ the following:
 
 -   Local [IPFS](https://ipfs.io/) nodes
 -   Peer [IPFS](https://ipfs.io/) nodes
--   [web3.storage](https://web3.storage/)
+-   [storacha.network](https://storacha.network/)
 -   [pinata.cloud](https://pinata.cloud)
 
 *Note: This currently requires an extended version of the ExternalData.cmake module developed in the [CMakeIPFSExternalData repository](https://github.com/InsightSoftwareConsortium/CMakeIPFSExternalData). This has not been integrated into upstream CMake due to the availability of C++ CID verification code to complete the feature set in a
@@ -86,9 +86,28 @@ cp data.duckdb.empty data.duckdb
 
 Populate a *.env* file in the repository with environmental variables used by application services in the format `<VAR>=<VALUE>`.
 
-#### web3.storage
+#### Storacha
 
-Populate `DID`, `KEY`, and `PROOF` as [described in the web3.storage documentation on creation of delegations](https://web3.storage/docs/how-to/upload/#bring-your-own-delegations).
+Generate upload credentials using the [Storacha CLI](https://docs.storacha.network/how-to/upload/#bring-your-own-delegations):
+
+```sh
+npm install -g @storacha/cli
+storacha login <your-email>
+storacha space use <space-did>
+
+# Generate agent key -- store the key (starting "Mg...") as KEY in .env
+storacha key create --json
+
+# Create delegation -- store the base64 output as PROOF in .env
+storacha delegation create <did_from_above> \
+  --can space/blob/add \
+  --can space/index/add \
+  --can filecoin/offer \
+  --can upload/add \
+  --base64
+```
+
+Populate `KEY` and `PROOF` in the `.env` file.
 
 ### mailjet
 

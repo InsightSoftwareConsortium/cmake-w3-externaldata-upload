@@ -81,7 +81,7 @@ class Uploader:
                 )
             except Exception as e:
                 print(e)
-                callbacks["uploadErrorCallback"]("Error during web3.storage upload")
+                callbacks["uploadErrorCallback"]("Error during Storacha upload")
                 return
 
             name = contents.name
@@ -101,7 +101,7 @@ class Uploader:
             callbacks["uploadCompleteCallback"](cid)
 
             subject = f"{email} ({auth_id}) uploaded {name} with cmake-w3-externaldata"
-            body = f'<p><strong>{email} ({auth_id})</strong> uploaded <strong>{name}</strong>, {size} bytes, to IPFS with CID {cid}</p>  <p><a href="https://w3s.link/ipfs/{cid}">https://w3s.link/ipfs/{cid}</a></p>'
+            body = f'<p><strong>{email} ({auth_id})</strong> uploaded <strong>{name}</strong>, {size} bytes, to IPFS with CID {cid}</p>  <p><a href="https://storacha.link/ipfs/{cid}">https://storacha.link/ipfs/{cid}</a></p>'
             sender_email = os.environ["SENDER_EMAIL"]
             recipient_email = os.environ["RECIPIENT_EMAIL"]
             data = {
