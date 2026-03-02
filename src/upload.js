@@ -109,7 +109,7 @@ export class UploadFileForm extends window.HTMLElement {
     this.cid = cid
     showMessage(`> 🔑 Calculated Content ID: ${cid} `)
     showMessage(`> ✅ Storacha now hosting ${cid}`)
-    const cidLink = `https://storacha.link/ipfs/${this.cid}`
+    const cidLink = `https://dweb.link/ipfs/${this.cid}`
     showLink(cidLink)
     const templateContent = this.uploadCompleteTemplate$.content.cloneNode(true)
     this.replaceChildren(this.formatUploadCompleteTemplateContent(templateContent))
@@ -146,7 +146,7 @@ export class UploadFileForm extends window.HTMLElement {
     const slot = templateContent.querySelector('[data-root-cid-slot]')
     slot.innerText = this.cid
     const hrefSlot = templateContent.querySelector('[data-root-cid-href-slot]')
-    hrefSlot.href = `https://storacha.link/ipfs/${this.cid}`
+    hrefSlot.href = `https://dweb.link/ipfs/${this.cid}`
     hrefSlot.download = this.file.name
     const fileNameSlot = templateContent.querySelector('[data-file-name-slot]')
     fileNameSlot.innerText = this.file.name
