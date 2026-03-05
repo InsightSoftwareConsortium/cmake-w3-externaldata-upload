@@ -54,14 +54,23 @@
       </header>
       <div class="w-90 w-50-ns mw6">
         <login-interface id="login-interface-component">
-          <iframe
-            id="login-iframe"
-            title="login"
-            src=""
-            style="width: 100%; height: 500px; border: none;"></iframe>
-        <login-interface>
+          <div class='flex items-center justify-center' style="padding: 40px 0;">
+            <div class='spinner'></div>
+            <span class='ml3 near-black'>Checking authentication...</span>
+          </div>
+        </login-interface>
       </div>
     </div>
+
+    <!-- Login button (shown when not authenticated) -->
+    <template id="login-button-template">
+      <div style="text-align: center; padding: 40px 0;">
+        <p class="near-black mb3">Sign in to upload files to IPFS via Storacha.</p>
+        <button id="github-login" class="ph3 pv2" style="font-size: 16px; cursor: pointer;">
+          Sign in with GitHub
+        </button>
+      </div>
+    </template>
 
     <!-- Logged in -->
     <template id="login-success-template">

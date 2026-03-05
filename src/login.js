@@ -1,12 +1,12 @@
 import './assets/tachyons.min.css'
 import { EVENTS } from './main'
 
-import hypha from './hypha'
+import api from './api.js'
 
 const SELECTORS = {
   signOutButton: '#sign-out',
   confirmationTemplate: '#login-success-template',
-  loginIframe: '#login-iframe',
+  loginButtonTemplate: '#login-button-template',
 }
 
 export class LoginInterface extends window.HTMLElement {
@@ -15,25 +15,32 @@ export class LoginInterface extends window.HTMLElement {
     this.confirmationTemplate$ = document.querySelector(
       SELECTORS.confirmationTemplate
     )
+    this.loginButtonTemplate$ = document.querySelector(
+      SELECTORS.loginButtonTemplate
+    )
     this.signOutHandler = this.signOutHandler.bind(this)
-    this.formatTemplateContent = this.formatTemplateContent.bind(this)
-    this.loginIframe$ = document.querySelector(SELECTORS.loginIframe)
   }
 
   async connectedCallback() {
-    await hypha.login(this.toggleConfirmation.bind(this))
+    // Check if user is already authenticated (e.g., returning from OAuth callback)
+    const user = await api.checkAuth()
+    if (user) {
+      this.toggleConfirmation()
+    } else {
+      this.showLoginButton()
+    }
   }
 
-  formatTemplateContent(templateContent) {
-    return templateContent
+  showLoginButton() {
+    const templateContent = this.loginButtonTemplate$.content.cloneNode(true)
+    this.replaceChildren(templateContent)
+    const loginButton = this.querySelector('#github-login')
+    loginButton.addEventListener('click', () => api.login())
   }
 
   toggleConfirmation() {
-    const templateContent = this.confirmationTemplate$.content
-    this.replaceChildren(this.formatTemplateContent(templateContent))
-    if (this.loginIframe$) {
-      this.loginIframe$.remove()
-    }
+    const templateContent = this.confirmationTemplate$.content.cloneNode(true)
+    this.replaceChildren(templateContent)
     this.signOutButton$ = document.querySelector(SELECTORS.signOutButton)
     this.signOutButton$.addEventListener('click', this.signOutHandler)
 
@@ -47,8 +54,7 @@ export class LoginInterface extends window.HTMLElement {
 
   async signOutHandler (e) {
     e.preventDefault()
-    hypha.logout()
-    window.location.reload()
+    await api.logout()
   }
 }
 

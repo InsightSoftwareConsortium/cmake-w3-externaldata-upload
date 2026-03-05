@@ -1,0 +1,21 @@
+{
+  "name": "cmake-w3-externaldata-upload-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:init": "wrangler d1 execute cmake-w3-externaldata-upload --local --file=schema.sql",
+    "db:init:remote": "wrangler d1 execute cmake-w3-externaldata-upload --remote --file=schema.sql"
+  },
+  "dependencies": {
+    "@ipld/dag-ucan": "^3.4.5",
+    "@storacha/client": "^2.0.7",
+    "hono": "^4.7.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250109.0",
+    "typescript": "^5.7.0",
+    "wrangler": "^4.0.0"
+  }
+}

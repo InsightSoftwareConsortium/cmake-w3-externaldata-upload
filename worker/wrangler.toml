@@ -1,0 +1,25 @@
+name = "cmake-w3-externaldata-upload-api"
+main = "src/index.ts"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# D1 database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "cmake-w3-externaldata-upload"
+database_id = "YOUR_D1_DATABASE_ID"
+
+# Environment variables set via `wrangler secret put`
+# GITHUB_CLIENT_ID - GitHub OAuth App client ID
+# GITHUB_CLIENT_SECRET - GitHub OAuth App client secret
+# SESSION_SECRET - Random secret for signing session cookies
+# STORACHA_KEY - Storacha agent private key (ed25519)
+# STORACHA_PROOF - Storacha delegation proof (base64)
+# MJ_APIKEY_PUBLIC - MailJet public API key
+# MJ_APIKEY_PRIVATE - MailJet private API key
+# SENDER_EMAIL - Notification sender email
+# RECIPIENT_EMAIL - Notification recipient email
+# FRONTEND_URL - Frontend origin for CORS (e.g., https://content-link-upload.netlify.app)
+
+[vars]
+ENVIRONMENT = "production"
