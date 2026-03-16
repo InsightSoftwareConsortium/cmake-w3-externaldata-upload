@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "cmake-w3-externaldata-upload"
-database_id = "YOUR_D1_DATABASE_ID"
+database_id = "9944a600-e1ed-436f-b272-abaec407fa08"
 
 # Environment variables set via `wrangler secret put`
 # GITHUB_CLIENT_ID - GitHub OAuth App client ID
