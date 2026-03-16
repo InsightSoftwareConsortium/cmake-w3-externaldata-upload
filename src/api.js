@@ -103,7 +103,7 @@ class ApiClient {
 
     if (!response.ok) {
       const data = await response.json();
-      console.error("Failed to report upload:", data.error);
+      throw new Error(data.error || "Failed to report upload completion");
     }
   }
 }

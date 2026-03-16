@@ -45,7 +45,7 @@ export async function checkUploadAllowed(
     .bind(authId)
     .first<{ total: number | null }>();
 
-  if (idQuota?.total && idQuota.total + fileSize > QUOTA_PER_USER) {
+  if (idQuota?.total != null && idQuota.total + fileSize > QUOTA_PER_USER) {
     return { allowed: false, error: "User has exceeded upload quota" };
   }
 
@@ -55,7 +55,7 @@ export async function checkUploadAllowed(
     .bind(email)
     .first<{ total: number | null }>();
 
-  if (emailQuota?.total && emailQuota.total + fileSize > QUOTA_PER_USER) {
+  if (emailQuota?.total != null && emailQuota.total + fileSize > QUOTA_PER_USER) {
     return { allowed: false, error: "User has exceeded upload quota" };
   }
 

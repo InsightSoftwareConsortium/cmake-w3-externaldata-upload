@@ -23,9 +23,11 @@ async function createSessionToken(
   const key = await getSigningKey(secret);
   const data = JSON.stringify(payload);
   const enc = new TextEncoder();
-  const signature = await crypto.subtle.sign("HMAC", key, enc.encode(data));
+  const dataBytes = enc.encode(data);
+  const signature = await crypto.subtle.sign("HMAC", key, dataBytes);
   const sig = btoa(String.fromCharCode(...new Uint8Array(signature)));
-  const b64data = btoa(data);
+  // Encode the UTF-8 bytes to base64 (handles non-Latin1 characters safely)
+  const b64data = btoa(String.fromCharCode(...dataBytes));
   return `${b64data}.${sig}`;
 }
 
@@ -37,16 +39,17 @@ async function verifySessionToken(
     const [b64data, sig] = token.split(".");
     if (!b64data || !sig) return null;
 
-    const data = atob(b64data);
+    // Decode base64 back to UTF-8 bytes, then to string
+    const dataBytes = Uint8Array.from(atob(b64data), (c) => c.charCodeAt(0));
+    const data = new TextDecoder().decode(dataBytes);
     const key = await getSigningKey(secret);
-    const enc = new TextEncoder();
 
     const sigBytes = Uint8Array.from(atob(sig), (c) => c.charCodeAt(0));
     const valid = await crypto.subtle.verify(
       "HMAC",
       key,
       sigBytes,
-      enc.encode(data)
+      dataBytes
     );
     if (!valid) return null;
 
@@ -61,12 +64,21 @@ async function verifySessionToken(
   }
 }
 
-function sessionCookie(token: string, maxAge: number): string {
-  return `session=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
+function cookieFlags(isLocalDev: boolean): string {
+  // Cross-site fetch with credentials requires SameSite=None; Secure.
+  // Local dev over plain http uses SameSite=Lax without Secure so cookies
+  // are actually stored and sent.
+  return isLocalDev
+    ? "HttpOnly; SameSite=Lax"
+    : "HttpOnly; Secure; SameSite=None";
 }
 
-function clearSessionCookie(): string {
-  return `session=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`;
+function sessionCookie(token: string, maxAge: number, isLocalDev: boolean): string {
+  return `session=${token}; Path=/; ${cookieFlags(isLocalDev)}; Max-Age=${maxAge}`;
+}
+
+function clearSessionCookie(isLocalDev: boolean): string {
+  return `session=; Path=/; ${cookieFlags(isLocalDev)}; Max-Age=0`;
 }
 
 // --- Middleware: extract session from cookie ---
@@ -94,12 +106,13 @@ auth.get("/login", (c) => {
   });
 
   // Store state in a short-lived cookie for CSRF protection
+  const isLocalDev = new URL(c.req.url).hostname === "localhost";
   const response = c.redirect(
     `https://github.com/login/oauth/authorize?${params}`
   );
   response.headers.set(
     "Set-Cookie",
-    `oauth_state=${state}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=600`
+    `oauth_state=${state}; Path=/; ${cookieFlags(isLocalDev)}; Max-Age=600`
   );
   return response;
 });
@@ -195,12 +208,13 @@ auth.get("/callback", async (c) => {
 
   // Redirect to frontend with session cookie set
   const frontendUrl = c.env.FRONTEND_URL || new URL(c.req.url).origin;
+  const isLocalDev = new URL(c.req.url).hostname === "localhost";
   const response = c.redirect(frontendUrl);
-  response.headers.append("Set-Cookie", sessionCookie(token, 86400));
+  response.headers.append("Set-Cookie", sessionCookie(token, 86400, isLocalDev));
   // Clear the oauth_state cookie
   response.headers.append(
     "Set-Cookie",
-    `oauth_state=; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=0`
+    `oauth_state=; Path=/; ${cookieFlags(isLocalDev)}; Max-Age=0`
   );
   return response;
 });
@@ -224,8 +238,9 @@ auth.get("/me", async (c) => {
 
 // POST /auth/logout - Clear session
 auth.post("/logout", (c) => {
+  const isLocalDev = new URL(c.req.url).hostname === "localhost";
   const response = c.json({ ok: true });
-  response.headers.set("Set-Cookie", clearSessionCookie());
+  response.headers.set("Set-Cookie", clearSessionCookie(isLocalDev));
   return response;
 });
 
