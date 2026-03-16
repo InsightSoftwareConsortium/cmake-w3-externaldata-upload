@@ -56,7 +56,7 @@ export class UploadFileForm extends window.HTMLElement {
   async handleFileUpload(event) {
     event.preventDefault()
 
-    const fileInputEl = this.form$.querySelector('input[type=file')
+    const fileInputEl = this.form$.querySelector('input[type=file]')
     this.file = fileInputEl.files[0]
 
     if (!this.file) {

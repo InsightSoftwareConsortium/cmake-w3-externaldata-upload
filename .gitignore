@@ -15,3 +15,4 @@ oauth2_creds.json
 worker/.dev.vars
 worker/.wrangler/
 worker/node_modules/
+worker/package-lock.json
