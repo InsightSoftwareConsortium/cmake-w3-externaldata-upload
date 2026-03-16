@@ -51,9 +51,14 @@ app.post("/api/delegation", async (c) => {
     fileSize: number;
   }>();
 
-  if (!body.agentDid || !body.fileName || !body.fileSize) {
+  const { agentDid, fileName, fileSize } = body;
+  if (
+    !agentDid || typeof agentDid !== "string" ||
+    !fileName || typeof fileName !== "string" ||
+    typeof fileSize !== "number" || !Number.isFinite(fileSize) || fileSize < 0
+  ) {
     return c.json(
-      { error: "Missing required fields: agentDid, fileName, fileSize" },
+      { error: "Missing or invalid fields: agentDid, fileName, fileSize" },
       400
     );
   }
@@ -63,7 +68,7 @@ app.post("/api/delegation", async (c) => {
     c.env.DB,
     session.github_id,
     session.email,
-    body.fileSize
+    fileSize
   );
   if (!check.allowed) {
     return c.json({ error: check.error }, 403);
@@ -74,12 +79,13 @@ app.post("/api/delegation", async (c) => {
     const delegationBytes = await createDelegation({
       storachaKey: c.env.STORACHA_KEY,
       storachaProof: c.env.STORACHA_PROOF,
-      audienceDid: body.agentDid,
+      audienceDid: agentDid,
     });
 
     return new Response(delegationBytes, {
       headers: {
         "Content-Type": "application/octet-stream",
+        "Cache-Control": "no-store",
       },
     });
   } catch (err) {
@@ -106,11 +112,27 @@ app.post("/api/upload-complete", async (c) => {
     fileSize: number;
   }>();
 
-  if (!body.cid || !body.fileName || !body.fileSize) {
+  const { cid, fileName, fileSize } = body;
+  if (
+    !cid || typeof cid !== "string" ||
+    !fileName || typeof fileName !== "string" ||
+    typeof fileSize !== "number" || !Number.isFinite(fileSize) || fileSize < 0
+  ) {
     return c.json(
-      { error: "Missing required fields: cid, fileName, fileSize" },
+      { error: "Missing or invalid fields: cid, fileName, fileSize" },
       400
     );
+  }
+
+  // Re-check blacklist and quota before logging (prevents log/email spam)
+  const check = await checkUploadAllowed(
+    c.env.DB,
+    session.github_id,
+    session.email,
+    fileSize
+  );
+  if (!check.allowed) {
+    return c.json({ error: check.error }, 403);
   }
 
   // Log to D1
@@ -118,9 +140,9 @@ app.post("/api/upload-complete", async (c) => {
     c.env.DB,
     session.github_id,
     session.email,
-    body.fileName,
-    body.fileSize,
-    body.cid
+    fileName,
+    fileSize,
+    cid
   );
 
   // Send notification email (fire and forget via waitUntil if available)
@@ -131,15 +153,15 @@ app.post("/api/upload-complete", async (c) => {
     recipientEmail: c.env.RECIPIENT_EMAIL,
     email: session.email,
     authId: session.github_id,
-    fileName: body.fileName,
-    fileSize: body.fileSize,
-    cid: body.cid,
+    fileName,
+    fileSize,
+    cid,
   });
 
   // Use waitUntil to not block the response on email sending
   c.executionCtx.waitUntil(emailPromise);
 
-  return c.json({ ok: true, cid: body.cid });
+  return c.json({ ok: true, cid });
 });
 
 // Health check
