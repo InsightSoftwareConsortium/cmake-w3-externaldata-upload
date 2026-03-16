@@ -13,7 +13,6 @@ const SELECTORS = {
 }
 
 document.addEventListener(EVENTS.loginSuccess, (event) => {
-  const loginEl = document.querySelector(SELECTORS.loginInterfaceComponent)
   // Switch components
   const uploadEl = document.createElement('upload-form')
   const container = document.querySelector('#app div')

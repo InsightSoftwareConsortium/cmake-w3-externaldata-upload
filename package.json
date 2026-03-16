@@ -1,26 +1,23 @@
 {
   "name": "cmake-w3-externaldata-upload",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "scripts": {
-    "start": "concurrently -n \"hypha,vite\" --success first -k \"pnpm start-hypha\" \"vite build --sourcemap true --watch\"",
-    "dev": "pnpm start",
-    "build": "VITE_HYPHA_SERVER_URL=https://hypha.website BASE_DIR=/ vite build",
-    "start-hypha": "VITE_HYPHA_SERVER_URL=http://localhost:9000 PYTHONPATH=./src hypha --host=0.0.0.0 --port=9000 --startup-functions=./src/hypha-startup-functions.py:hypha_startup --static-mounts=/app/:./dist/",
-    "start-hypha-service": "VITE_HYPHA_SERVER_URL=https://hypha.website PYTHONPATH=./src python ./src/register-hypha-uploader-service.py",
-    "preview": "VITE_HYPHA_SERVER_URL=https://hypha.website vite preview --port 4173"
+    "dev": "concurrently -n \"worker,vite\" -k \"pnpm dev:worker\" \"pnpm dev:frontend\"",
+    "dev:frontend": "vite dev",
+    "dev:worker": "cd worker && pnpm dev",
+    "build": "BASE_DIR=/ vite build",
+    "preview": "vite preview --port 4173",
+    "worker:deploy": "cd worker && pnpm deploy",
+    "worker:db:init": "cd worker && pnpm db:init",
+    "worker:db:init:remote": "cd worker && pnpm db:init:remote",
+    "worker:install": "cd worker && pnpm install"
   },
   "dependencies": {
-    "@ipld/car": "^5.2.6",
-    "@ucanto/core": "^9.0.1",
-    "@ucanto/principal": "^9.0.0",
-    "@web3-storage/w3up-client": "^12.0.0",
-    "commander": "^11.1.0",
-    "dotenv": "^16.3.1",
-    "files-from-path": "^1.0.4",
-    "hypha-rpc": "0.20.53-post-1"
+    "@storacha/client": "^2.0.7",
+    "@ucanto/principal": "^9.0.3"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2",
-    "vite": "^6.3.5"
+    "concurrently": "^9.2.1",
+    "vite": "^7.3.1"
   }
 }

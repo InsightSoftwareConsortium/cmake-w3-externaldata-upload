@@ -3,7 +3,6 @@ dist/
 micromamba/
 .env
 oauth2_creds.json
-data.duckdb
 
 # pixi environments
 .pixi
@@ -11,3 +10,9 @@ data.duckdb
 
 # Local Netlify folder
 .netlify
+
+# Cloudflare Worker
+worker/.dev.vars
+worker/.wrangler/
+worker/node_modules/
+worker/package-lock.json
