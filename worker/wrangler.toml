@@ -1,4 +1,4 @@
-name = "cmake-w3-externaldata-upload-api"
+name = "cmake-w3-externaldata-upload-worker"
 main = "src/index.ts"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
