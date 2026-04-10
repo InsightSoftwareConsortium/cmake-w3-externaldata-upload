@@ -12,6 +12,7 @@ interface EmailParams {
   fileName: string;
   fileSize: number;
   cid: string;
+  gatewayDomain: string;
 }
 
 export async function sendUploadNotification(
@@ -27,6 +28,7 @@ export async function sendUploadNotification(
     fileName,
     fileSize,
     cid,
+    gatewayDomain,
   } = params;
 
   // HTML-escape values that originate from user input to prevent HTML injection
@@ -44,8 +46,8 @@ export async function sendUploadNotification(
   const safeFileName = escapeHtml(fileName);
 
   const subject = `${email} (${authId}) uploaded ${fileName} with cmake-w3-externaldata`;
-  const textBody = `${email} (${authId}) uploaded ${fileName}, ${fileSize} bytes, to IPFS with CID ${cid}\n\nhttps://dweb.link/ipfs/${cid}`;
-  const htmlBody = `<p><strong>${safeEmail} (${safeAuthId})</strong> uploaded <strong>${safeFileName}</strong>, ${fileSize} bytes, to IPFS with CID ${cid}</p>  <p><a href="https://dweb.link/ipfs/${cid}">https://dweb.link/ipfs/${cid}</a></p>`;
+  const textBody = `${email} (${authId}) uploaded ${fileName}, ${fileSize} bytes, to IPFS with CID ${cid}\n\nhttps://${gatewayDomain}/ipfs/${cid}`;
+  const htmlBody = `<p><strong>${safeEmail} (${safeAuthId})</strong> uploaded <strong>${safeFileName}</strong>, ${fileSize} bytes, to IPFS with CID ${cid}</p>  <p><a href="https://${gatewayDomain}/ipfs/${cid}">https://${gatewayDomain}/ipfs/${cid}</a></p>`;
 
   const credentials = btoa(`${apiKeyPublic}:${apiKeyPrivate}`);
 

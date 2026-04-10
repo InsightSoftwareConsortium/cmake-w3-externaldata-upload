@@ -64,27 +64,26 @@ class ApiClient {
   }
 
   /**
-   * Request a UCAN delegation from the Worker for browser-direct upload.
-   * @param {string} agentDid - The browser Storacha agent's DID
+   * Request a signed upload URL from the Worker for browser-direct upload.
    * @param {string} fileName - Name of the file being uploaded
    * @param {number} fileSize - Size of the file in bytes
-   * @returns {Promise<Uint8Array>} Delegation bytes
+   * @returns {Promise<string>} The signed upload URL
    */
-  async getDelegation(agentDid, fileName, fileSize) {
-    const response = await fetch(`${API_BASE}/api/delegation`, {
+  async getUploadUrl(fileName, fileSize) {
+    const response = await fetch(`${API_BASE}/api/upload-url`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ agentDid, fileName, fileSize }),
+      body: JSON.stringify({ fileName, fileSize }),
     });
 
     if (!response.ok) {
       const data = await response.json();
-      throw new Error(data.error || "Failed to get upload delegation");
+      throw new Error(data.error || "Failed to get upload URL");
     }
 
-    const buffer = await response.arrayBuffer();
-    return new Uint8Array(buffer);
+    const data = await response.json();
+    return data.url;
   }
 
   /**

@@ -3,8 +3,8 @@ export interface Env {
   GITHUB_CLIENT_ID: string;
   GITHUB_CLIENT_SECRET: string;
   SESSION_SECRET: string;
-  STORACHA_KEY: string;
-  STORACHA_PROOF: string;
+  PINATA_JWT: string;
+  PINATA_GATEWAY_DOMAIN: string;
   MJ_APIKEY_PUBLIC: string;
   MJ_APIKEY_PRIVATE: string;
   SENDER_EMAIL: string;

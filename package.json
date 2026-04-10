@@ -13,9 +13,7 @@
     "worker:install": "cd worker && pnpm install"
   },
   "dependencies": {
-    "@cloudflare/vite-plugin": "^1.28.0",
-    "@storacha/client": "^2.0.7",
-    "@ucanto/principal": "^9.0.3"
+    "@cloudflare/vite-plugin": "^1.28.0"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

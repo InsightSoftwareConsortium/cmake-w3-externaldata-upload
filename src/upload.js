@@ -1,6 +1,3 @@
-import { create } from '@storacha/client'
-import * as Delegation from '@storacha/client/delegation'
-
 import download from './download.js'
 import api from './api.js'
 import { showLink, showMessage } from './messages.js'
@@ -33,7 +30,6 @@ export class UploadFileForm extends window.HTMLElement {
     this.uploadErrorTemplate$ = document.querySelector(
       SELECTORS.uploadErrorTemplate
     )
-    this.storachaClient = null
   }
 
   async connectedCallback () {
@@ -46,10 +42,6 @@ export class UploadFileForm extends window.HTMLElement {
 
     const email = api.email()
     showMessage(`> 👋 Welcome ${email}`)
-
-    // Create Storacha client for browser-direct uploads
-    showMessage('> 🔧 Initializing upload client...')
-    this.storachaClient = await create()
     showMessage('> ✅ Upload client ready')
   }
 
@@ -67,35 +59,36 @@ export class UploadFileForm extends window.HTMLElement {
     showMessage(`> 📦 Preparing to upload ${this.file.name} (${this.file.size} bytes)`)
 
     try {
-      // Step 1: Request UCAN delegation from the Worker
+      // Step 1: Request signed upload URL from the Worker
       showMessage('> 🔑 Requesting upload authorization...')
-      const delegationBytes = await api.getDelegation(
-        this.storachaClient.agent.did(),
-        this.file.name,
-        this.file.size
-      )
+      const uploadUrl = await api.getUploadUrl(this.file.name, this.file.size)
 
-      // Step 2: Deserialize and add the delegation to the client
-      const delegation = await Delegation.extract(delegationBytes)
-      if (!delegation.ok) {
-        throw new Error('Failed to parse upload delegation')
+      // Step 2: Upload directly from the browser to Pinata
+      this.toggleEncoding()
+      showMessage('> 📡 Uploading file to IPFS...')
+
+      const formData = new FormData()
+      formData.append('file', this.file)
+      formData.append('network', 'public')
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text()
+        throw new Error(`Upload failed (${uploadResponse.status}): ${errorText}`)
       }
 
-      const space = await this.storachaClient.addSpace(delegation.ok)
-      await this.storachaClient.setCurrentSpace(space.did())
+      const uploadResult = await uploadResponse.json()
+      const cidString = uploadResult.data.cid
 
-      // Step 3: Upload directly from the browser to Storacha
-      this.toggleEncoding()
-      showMessage('> 📡 Uploading file directly to Storacha...')
-
-      const cid = await this.storachaClient.uploadFile(this.file)
-      const cidString = cid.toString()
-
-      // Step 4: Report the completed upload to the Worker (logging + email)
+      // Step 3: Report the completed upload to the Worker (logging + email)
       showMessage('> 📝 Recording upload...')
       await api.reportUploadComplete(cidString, this.file.name, this.file.size)
 
-      // Step 5: Show success
+      // Step 4: Show success
       this.toggleUploadComplete(cidString)
 
     } catch (error) {
@@ -127,8 +120,9 @@ export class UploadFileForm extends window.HTMLElement {
   toggleUploadComplete (cid) {
     this.cid = cid
     showMessage(`> 🔑 Calculated Content ID: ${cid} `)
-    showMessage(`> ✅ Storacha now hosting ${cid}`)
-    const cidLink = `https://dweb.link/ipfs/${this.cid}`
+    showMessage(`> ✅ IPFS now hosting ${cid}`)
+    const gatewayBase = import.meta.env.VITE_PINATA_GATEWAY || 'https://dweb.link'
+    const cidLink = `${gatewayBase}/ipfs/${this.cid}`
     showLink(cidLink)
     const templateContent = this.uploadCompleteTemplate$.content.cloneNode(true)
     this.replaceChildren(this.formatUploadCompleteTemplateContent(templateContent))
@@ -165,7 +159,8 @@ export class UploadFileForm extends window.HTMLElement {
     const slot = templateContent.querySelector('[data-root-cid-slot]')
     slot.innerText = this.cid
     const hrefSlot = templateContent.querySelector('[data-root-cid-href-slot]')
-    hrefSlot.href = `https://dweb.link/ipfs/${this.cid}`
+    const gatewayBase = import.meta.env.VITE_PINATA_GATEWAY || 'https://dweb.link'
+    hrefSlot.href = `${gatewayBase}/ipfs/${this.cid}`
     hrefSlot.download = this.file.name
     const fileNameSlot = templateContent.querySelector('[data-file-name-slot]')
     fileNameSlot.innerText = this.file.name
