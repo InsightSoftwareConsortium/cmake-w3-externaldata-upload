@@ -38,6 +38,9 @@ export async function createSignedUploadUrl(
     throw new Error(`Pinata sign request failed (${response.status}): ${text}`);
   }
 
-  const result = (await response.json()) as { data: string };
+  const result = (await response.json()) as { data?: string };
+  if (typeof result?.data !== "string" || result.data.length === 0) {
+    throw new Error("Pinata sign response missing signed URL");
+  }
   return { url: result.data };
 }

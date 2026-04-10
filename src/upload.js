@@ -82,7 +82,10 @@ export class UploadFileForm extends window.HTMLElement {
       }
 
       const uploadResult = await uploadResponse.json()
-      const cidString = uploadResult.data.cid
+      const cidString = uploadResult?.data?.cid
+      if (!cidString) {
+        throw new Error('Upload response missing CID')
+      }
 
       // Step 3: Report the completed upload to the Worker (logging + email)
       showMessage('> 📝 Recording upload...')

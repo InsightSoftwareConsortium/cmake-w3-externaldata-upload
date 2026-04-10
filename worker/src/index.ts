@@ -45,10 +45,12 @@ app.post("/api/upload-url", async (c) => {
     return c.json({ error: "Not authenticated" }, 401);
   }
 
-  const body = await c.req.json<{
-    fileName: string;
-    fileSize: number;
-  }>();
+  let body: { fileName: string; fileSize: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
 
   const { fileName, fileSize } = body;
   if (
@@ -99,11 +101,12 @@ app.post("/api/upload-complete", async (c) => {
     return c.json({ error: "Not authenticated" }, 401);
   }
 
-  const body = await c.req.json<{
-    cid: string;
-    fileName: string;
-    fileSize: number;
-  }>();
+  let body: { cid: string; fileName: string; fileSize: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
 
   const { cid, fileName, fileSize } = body;
   if (
