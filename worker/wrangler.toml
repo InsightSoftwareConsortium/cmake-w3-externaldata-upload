@@ -13,8 +13,7 @@ database_id = "9944a600-e1ed-436f-b272-abaec407fa08"
 # GITHUB_CLIENT_ID - GitHub OAuth App client ID
 # GITHUB_CLIENT_SECRET - GitHub OAuth App client secret
 # SESSION_SECRET - Random secret for signing session cookies
-# STORACHA_KEY - Storacha agent private key (ed25519)
-# STORACHA_PROOF - Storacha delegation proof (base64)
+# PINATA_JWT - Pinata API JWT (requires pinFileToIPFS permission)
 # MJ_APIKEY_PUBLIC - MailJet public API key
 # MJ_APIKEY_PRIVATE - MailJet private API key
 # SENDER_EMAIL - Notification sender email
@@ -23,3 +22,4 @@ database_id = "9944a600-e1ed-436f-b272-abaec407fa08"
 
 [vars]
 ENVIRONMENT = "production"
+PINATA_GATEWAY_DOMAIN = "itk.mypinata.cloud"
