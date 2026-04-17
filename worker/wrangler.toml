@@ -22,4 +22,4 @@ database_id = "9944a600-e1ed-436f-b272-abaec407fa08"
 
 [vars]
 ENVIRONMENT = "production"
-PINATA_GATEWAY_DOMAIN = "your-gateway.mypinata.cloud"
+PINATA_GATEWAY_DOMAIN = "itk.mypinata.cloud"
